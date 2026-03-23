@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
+
+# Testing
+coverage/
+
+# Prisma
+qri-backend/prisma/*.db
+
+# Presentation (local assets)
+presentacion/node_modules/
+presentacion/screenshots/
+presentacion/*.pdf
+presentacion/*.html
+presentacion/*.pptx
+
+# Legacy projects (not needed for deploy)
+palta-api-ts-master/
+palta-coelsa-master/
+palta-web-administrator-fix-adapt-qr-reader-to-qr3/
+pal-qr-coelsa-ms/
+
+# Bruno
+qri-bruno/
+
+# Misc
+*.docx
+*.pdf

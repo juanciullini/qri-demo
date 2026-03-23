@@ -1,0 +1,58 @@
+services:
+  api:
+    build: .
+    ports:
+      - '3000:3000'
+    environment:
+      - DATABASE_URL=postgresql://qri:qri@db:5432/qri
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
+      - COELSA_MODE=${COELSA_MODE:-sandbox}
+      - COELSA_BASE_URL=${COELSA_BASE_URL}
+      - COELSA_AUTH_URL=${COELSA_AUTH_URL}
+      - COELSA_CVU_URL=${COELSA_CVU_URL}
+      - COELSA_CERT_PATH=/certs/client.pem
+      - COELSA_KEY_PATH=/certs/client.key
+      - COELSA_CA_PATH=/certs/coelsa-ca.pem
+      - PSP_CUIT=${PSP_CUIT}
+      - PSP_REVERSE_DOMAIN=${PSP_REVERSE_DOMAIN:-app.qri}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
+      - FRONTEND_URL=${FRONTEND_URL:-http://localhost:5173}
+      - SANDBOX_DEFAULT_SCENARIO=${SANDBOX_DEFAULT_SCENARIO:-happy_path}
+    volumes:
+      - ./certs:/certs:ro
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_DB=qri
+      - POSTGRES_USER=qri
+      - POSTGRES_PASSWORD=qri
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U qri']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - '6379:6379'
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:

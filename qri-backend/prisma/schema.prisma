@@ -1,0 +1,255 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ── Enums ──
+
+enum Role {
+  ADMIN
+  OPERATOR
+  MERCHANT
+  VIEWER
+}
+
+enum MerchantStatus {
+  ACTIVE
+  SUSPENDED
+  DEACTIVATED
+}
+
+enum CoelsaStatus {
+  PENDING
+  REGISTERING
+  ACTIVE
+  SUSPENDED
+}
+
+enum SettlementFreq {
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
+enum QrType {
+  STATIC
+  DYNAMIC
+}
+
+enum QrStatus {
+  ACTIVE
+  EXPIRED
+  DISABLED
+}
+
+enum TxStatus {
+  CREADO
+  INTENCION_ENVIADA
+  INTENCION_ACEPTADA
+  DEBITO_PENDIENTE
+  DEBITO_CONFIRMADO
+  CREDITO_ENVIADO
+  EN_CURSO
+  ACREDITADO
+  REVERSADO
+  DEVUELTO
+}
+
+enum TxDirection {
+  INBOUND
+  OUTBOUND
+}
+
+enum SettlementStatus {
+  PENDING
+  SETTLED
+  RECONCILED
+}
+
+// ── Models ──
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  password_hash String
+  name          String
+  role          Role     @default(OPERATOR)
+  merchant_id   String?
+  merchant      Merchant? @relation(fields: [merchant_id], references: [id])
+  is_active     Boolean  @default(true)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  @@index([email])
+  @@index([merchant_id])
+}
+
+model Merchant {
+  id                     String              @id @default(uuid())
+  business_name          String
+  cuit                   String              @unique
+  cbu                    String
+  cvu                    String?
+  banco                  String?
+  sucursal               String?
+  terminal               String?
+  address                String?
+  postal_code            String?
+  city                   String?
+  mcc_codes              Json                // [{mcc:'5411', desc:'Supermercados', commission:0.6}]
+  coelsa_status          CoelsaStatus        @default(PENDING)
+  status                 MerchantStatus      @default(ACTIVE)
+  contact_email          String?
+  contact_phone          String?
+  settlement_freq        SettlementFreq      @default(DAILY)
+  split_percentage       Decimal?            @db.Decimal(5, 3) // 0 to 0.999 for COELSA split
+  commission_profile_id  String?
+  commission_profile     CommissionProfile?  @relation(fields: [commission_profile_id], references: [id])
+  qr_codes               QrCode[]
+  transactions           Transaction[]
+  settlements            Settlement[]
+  users                  User[]
+  created_at             DateTime            @default(now())
+  updated_at             DateTime            @updatedAt
+
+  @@index([cuit])
+  @@index([cvu])
+  @@index([status])
+  @@index([commission_profile_id])
+}
+
+model QrCode {
+  id           String       @id @default(uuid())
+  merchant_id  String
+  merchant     Merchant     @relation(fields: [merchant_id], references: [id])
+  type         QrType
+  qr_data      String       // EMVCo TLV encoded string
+  qr_hash      String?
+  qr_id_trx    String?      @unique
+  amount       Decimal?     @db.Decimal(15, 2)
+  currency     String       @default("ARS")
+  label        String?      // Descriptive name e.g. 'Caja 1'
+  expires_at   DateTime?
+  status       QrStatus     @default(ACTIVE)
+  transactions Transaction[]
+  created_at   DateTime     @default(now())
+
+  @@index([merchant_id])
+  @@index([qr_id_trx])
+  @@index([status])
+}
+
+model Transaction {
+  id                     String       @id @default(uuid())
+  qr_id_trx              String       @unique
+  id_debin               String?
+  direction              TxDirection  @default(INBOUND)
+  merchant_id            String?
+  merchant               Merchant?    @relation(fields: [merchant_id], references: [id])
+  qr_code_id             String?
+  qr_code                QrCode?      @relation(fields: [qr_code_id], references: [id])
+  status                 TxStatus
+  amount                 Decimal      @db.Decimal(15, 2)
+  currency               String       @default("ARS")
+  buyer_cuit             String?
+  buyer_cbu              String?
+  buyer_account_id       String?      // User ID of the Palta buyer (OUTBOUND)
+  mcc                    String?
+  postal_code            String?
+  payment_reference      String?
+  interchange            Json?
+  commission_data        Json?        // {importe_bruto, importe_neto, comision_comercio, ...}
+  platform_commission    Decimal?     @db.Decimal(15, 2)  // platform commission amount
+  merchant_net_amount    Decimal?     @db.Decimal(15, 2)  // net amount merchant receives
+  error_code             String?
+  error_description      String?
+  reversal_code          String?
+  reversal_reason        String?
+  refund_id              String?      // COELSA contra-cargo ID
+  coelsa_messages        Json[]       // Log of all request/response with COELSA
+  credit_forced          Boolean      @default(false)
+  credit_forced_pending  Boolean      @default(false)
+  reconciliation_status  String?      // null | MATCHED | DISCREPANCY | PENDING
+  external_merchant_cuit String?      // CUIT of external merchant (OUTBOUND)
+  external_merchant_name String?      // Name of external merchant (OUTBOUND)
+  external_merchant_cbu  String?      // CBU of external merchant (OUTBOUND)
+  scanned_qr_data        String?      // Raw QR string scanned (OUTBOUND)
+  intention_sent_at      DateTime?
+  intention_response_at  DateTime?
+  debit_confirmed_at     DateTime?
+  credit_sent_at         DateTime?
+  confirm_sent_at        DateTime?
+  confirm_response_at    DateTime?
+  completed_at           DateTime?
+  created_at             DateTime     @default(now())
+  updated_at             DateTime     @updatedAt
+
+  @@index([qr_id_trx])
+  @@index([merchant_id])
+  @@index([status])
+  @@index([created_at])
+  @@index([payment_reference])
+  @@index([direction])
+  @@index([external_merchant_cuit])
+}
+
+model Settlement {
+  id                 String           @id @default(uuid())
+  merchant_id        String
+  merchant           Merchant         @relation(fields: [merchant_id], references: [id])
+  period_start       DateTime         @db.Date
+  period_end         DateTime         @db.Date
+  total_transactions Int
+  total_amount       Decimal          @db.Decimal(15, 2)
+  total_commission   Decimal          @db.Decimal(15, 2)
+  merchant_net       Decimal          @db.Decimal(15, 2)
+  commission_detail  Json?            // [{mcc, tx_count, gross_amount, commission_amount, rate}]
+  avg_commission_rate Decimal?        @db.Decimal(5, 3)
+  status             SettlementStatus @default(PENDING)
+  created_at         DateTime         @default(now())
+
+  @@index([merchant_id])
+  @@index([status])
+  @@index([period_start, period_end])
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  user_id    String?
+  action     String   // CREATE, UPDATE, DELETE, LOGIN, etc.
+  entity     String   // User, Merchant, Transaction, etc.
+  entity_id  String?
+  changes    Json?    // {before, after} for mutations
+  ip_address String?
+  created_at DateTime @default(now())
+
+  @@index([entity, entity_id])
+  @@index([user_id])
+  @@index([created_at])
+}
+
+model SystemConfig {
+  key        String   @id
+  value      Json
+  updated_at DateTime @updatedAt
+}
+
+model CommissionProfile {
+  id            String     @id @default(uuid())
+  name          String     @unique
+  description   String?
+  is_default    Boolean    @default(false)
+  default_rate  Decimal    @db.Decimal(5, 3) // fallback rate for unlisted MCCs
+  rates         Json       // [{mcc:'5411', rate:0.6, direction:'INBOUND|OUTBOUND|BOTH'}]
+  is_active     Boolean    @default(true)
+  merchants     Merchant[]
+  created_at    DateTime   @default(now())
+  updated_at    DateTime   @updatedAt
+
+  @@index([is_default])
+  @@index([is_active])
+}

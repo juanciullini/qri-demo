@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: qri-demo
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: ENCRYPTION_KEY
+        generateValue: true
+      - key: PSP_CUIT
+        value: "30123456789"
+      - key: COELSA_MODE
+        value: sandbox
+      - key: FRONTEND_URL
+        value: https://qri-demo.onrender.com
