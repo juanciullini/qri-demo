@@ -22,7 +22,7 @@ FROM node:20-alpine
 WORKDIR /app
 
 COPY qri-backend/package*.json ./
-RUN npm ci --omit=dev
+RUN npm ci --omit=dev && npm install tsx
 
 COPY --from=backend-builder /app/dist ./dist
 COPY --from=backend-builder /app/node_modules/.prisma ./node_modules/.prisma
@@ -30,4 +30,4 @@ COPY qri-backend/prisma ./prisma
 COPY --from=frontend-builder /app/frontend/dist ./public
 
 EXPOSE 3000
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/app.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy && npx tsx prisma/seed.ts && node dist/app.js"]
