@@ -27,7 +27,18 @@ RUN npm ci --omit=dev && npm install tsx
 COPY --from=backend-builder /app/dist ./dist
 COPY --from=backend-builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY qri-backend/prisma ./prisma
-COPY --from=frontend-builder /app/frontend/dist ./public
+
+# Frontend SPA → public/app/
+COPY --from=frontend-builder /app/frontend/dist ./public/app
+
+# Landing page → public/landing/
+COPY landing/ ./public/landing/
+
+# Screenshots for landing page
+COPY presentacion/screenshots/dashboard.png ./public/landing/screenshots/
+COPY presentacion/screenshots/transacciones-listado.png ./public/landing/screenshots/
+COPY presentacion/screenshots/qr-generacion.png ./public/landing/screenshots/
+COPY presentacion/screenshots/comercio-detalle.png ./public/landing/screenshots/
 
 EXPOSE 3000
 CMD ["sh", "-c", "npx prisma migrate deploy && npx tsx prisma/seed.ts && node dist/app.js"]

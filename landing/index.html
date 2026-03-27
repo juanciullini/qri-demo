@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QRi — Plataforma de Pagos QR Interoperable</title>
+  <meta name="description" content="Plataforma de procesamiento de pagos QR Interoperable (Transferencias 3.0) sobre la red Coelsa. Solución completa para PSPs y billeteras digitales en Argentina." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: { 50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe', 300: '#93c5fd', 400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 800: '#1e40af', 900: '#1e3a8a' },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    .screenshot-shadow { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15); }
+  </style>
+</head>
+<body class="bg-white text-gray-900 antialiased">
+
+  <!-- Navbar -->
+  <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-sm border-b border-gray-100 z-50">
+    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
+          <span class="text-white font-bold text-sm">QR</span>
+        </div>
+        <span class="text-xl font-bold text-gray-900">QRi</span>
+      </div>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#como-funciona" class="text-sm text-gray-600 hover:text-primary-600 transition-colors">Producto</a>
+        <a href="#mercado" class="text-sm text-gray-600 hover:text-primary-600 transition-colors">Oportunidad</a>
+        <a href="#plataforma" class="text-sm text-gray-600 hover:text-primary-600 transition-colors">Plataforma</a>
+        <a href="/app/" class="bg-primary-600 text-white text-sm font-medium px-5 py-2 rounded-lg hover:bg-primary-700 transition-colors">Acceder a la Demo</a>
+      </div>
+      <a href="/app/" class="md:hidden bg-primary-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors">Demo</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="pt-32 pb-20 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="max-w-3xl">
+        <div class="inline-flex items-center gap-2 bg-primary-50 text-primary-700 text-sm font-medium px-4 py-1.5 rounded-full mb-6">
+          <span class="w-2 h-2 bg-primary-500 rounded-full"></span>
+          Transferencias 3.0 &middot; Red Coelsa
+        </div>
+        <h1 class="text-5xl md:text-6xl font-bold text-gray-900 leading-tight mb-6">
+          Plataforma de Pagos<br/>
+          <span class="text-primary-600">QR Interoperable</span>
+        </h1>
+        <p class="text-xl text-gray-600 leading-relaxed mb-10 max-w-2xl">
+          Procesamiento de pagos QR bajo normativa BCRA, integrado a la red Coelsa.
+          Solución llave en mano para operar como PSP con billetera digital,
+          liquidaciones automáticas y comisiones configurables.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="/app/" class="inline-flex items-center justify-center bg-primary-600 text-white font-semibold px-8 py-3.5 rounded-lg hover:bg-primary-700 transition-colors text-lg">
+            Acceder a la Demo
+            <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+          </a>
+          <a href="#como-funciona" class="inline-flex items-center justify-center border border-gray-300 text-gray-700 font-semibold px-8 py-3.5 rounded-lg hover:bg-gray-50 transition-colors text-lg">
+            Ver el Producto
+          </a>
+        </div>
+        <p class="mt-4 text-sm text-gray-400">Demo con datos de prueba &middot; Usuario: admin@qri.app &middot; Clave: Admin2026$</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section id="como-funciona" class="py-20 px-6 bg-gray-50">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Flujo de Pago QR Interoperable</h2>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">El ciclo completo de un pago QR Transferencias 3.0, desde el escaneo hasta la acreditación, procesado en menos de 15 segundos.</p>
+      </div>
+      <div class="grid md:grid-cols-4 gap-8">
+        <!-- Step 1 -->
+        <div class="relative bg-white rounded-xl p-8 border border-gray-100">
+          <div class="w-12 h-12 bg-primary-100 text-primary-600 rounded-xl flex items-center justify-center mb-5">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
+          </div>
+          <div class="text-xs font-bold text-primary-600 uppercase tracking-wide mb-2">Paso 1</div>
+          <h3 class="text-lg font-semibold mb-2">Escaneo del QR</h3>
+          <p class="text-gray-600 text-sm">El comprador escanea el QR EMVCo del comercio con su billetera digital. El QR contiene los datos del comercio en formato TLV.</p>
+        </div>
+        <!-- Step 2 -->
+        <div class="relative bg-white rounded-xl p-8 border border-gray-100">
+          <div class="w-12 h-12 bg-primary-100 text-primary-600 rounded-xl flex items-center justify-center mb-5">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+          </div>
+          <div class="text-xs font-bold text-primary-600 uppercase tracking-wide mb-2">Paso 2</div>
+          <h3 class="text-lg font-semibold mb-2">Intención de Pago</h3>
+          <p class="text-gray-600 text-sm">La billetera envía la intención de pago a Coelsa. Se valida el comercio, monto y datos. Coelsa confirma la operación.</p>
+        </div>
+        <!-- Step 3 -->
+        <div class="relative bg-white rounded-xl p-8 border border-gray-100">
+          <div class="w-12 h-12 bg-primary-100 text-primary-600 rounded-xl flex items-center justify-center mb-5">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+          </div>
+          <div class="text-xs font-bold text-primary-600 uppercase tracking-wide mb-2">Paso 3</div>
+          <h3 class="text-lg font-semibold mb-2">Débito y Crédito</h3>
+          <p class="text-gray-600 text-sm">Se debita la cuenta del pagador vía DEBIN y se acredita al comercio vía CVU. Todo en tiempo real con confirmación instantánea.</p>
+        </div>
+        <!-- Step 4 -->
+        <div class="relative bg-white rounded-xl p-8 border border-gray-100">
+          <div class="w-12 h-12 bg-primary-100 text-primary-600 rounded-xl flex items-center justify-center mb-5">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <div class="text-xs font-bold text-primary-600 uppercase tracking-wide mb-2">Paso 4</div>
+          <h3 class="text-lg font-semibold mb-2">Acreditación</h3>
+          <p class="text-gray-600 text-sm">Fondos acreditados en la cuenta del comercio. Liquidación automática con comisiones configurables por perfil de comercio.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Market opportunity -->
+  <section id="mercado" class="py-20 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Oportunidad de Mercado</h2>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">El ecosistema de pagos QR en Argentina crece aceleradamente impulsado por la regulación del BCRA y la adopción de billeteras digitales.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8 mb-16">
+        <div class="text-center p-8 rounded-xl border border-gray-100">
+          <div class="text-4xl md:text-5xl font-bold text-primary-600 mb-2">+200%</div>
+          <p class="text-gray-600">Crecimiento interanual de pagos QR en Argentina</p>
+        </div>
+        <div class="text-center p-8 rounded-xl border border-gray-100">
+          <div class="text-4xl md:text-5xl font-bold text-primary-600 mb-2">35M</div>
+          <p class="text-gray-600">Usuarios activos de billeteras digitales</p>
+        </div>
+        <div class="text-center p-8 rounded-xl border border-gray-100">
+          <div class="text-4xl md:text-5xl font-bold text-primary-600 mb-2">0.8%</div>
+          <p class="text-gray-600">Comisión promedio sobre cada transacción procesada</p>
+        </div>
+      </div>
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div>
+          <h3 class="text-2xl font-bold mb-6">Modelo de Revenue</h3>
+          <div class="space-y-4">
+            <div class="flex gap-4">
+              <div class="w-10 h-10 bg-primary-100 text-primary-600 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+              <div>
+                <h4 class="font-semibold mb-1">Comisión por transacción</h4>
+                <p class="text-gray-600 text-sm">Revenue share sobre cada pago QR procesado. Comisiones configurables por perfil de comercio con esquema de tiers.</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div class="w-10 h-10 bg-primary-100 text-primary-600 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+              </div>
+              <div>
+                <h4 class="font-semibold mb-1">Onboarding de comercios</h4>
+                <p class="text-gray-600 text-sm">Alta automatizada de comercios en Coelsa. Cada comercio registrado genera volumen recurrente de transacciones.</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div class="w-10 h-10 bg-primary-100 text-primary-600 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+              </div>
+              <div>
+                <h4 class="font-semibold mb-1">Liquidaciones automáticas</h4>
+                <p class="text-gray-600 text-sm">Sistema de liquidación con cortes configurables. Transparencia total para comercios y operadores.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-gray-50 rounded-2xl p-8">
+          <h3 class="text-xl font-bold mb-6">Stack Tecnológico</h3>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-white rounded-lg p-4 border border-gray-100">
+              <div class="text-sm font-semibold text-gray-900 mb-1">Backend</div>
+              <p class="text-xs text-gray-500">Fastify + TypeScript + Prisma + PostgreSQL</p>
+            </div>
+            <div class="bg-white rounded-lg p-4 border border-gray-100">
+              <div class="text-sm font-semibold text-gray-900 mb-1">Frontend</div>
+              <p class="text-xs text-gray-500">React 19 + Vite + TailwindCSS + Zustand</p>
+            </div>
+            <div class="bg-white rounded-lg p-4 border border-gray-100">
+              <div class="text-sm font-semibold text-gray-900 mb-1">Real-time</div>
+              <p class="text-xs text-gray-500">WebSocket con Socket.IO para transacciones en vivo</p>
+            </div>
+            <div class="bg-white rounded-lg p-4 border border-gray-100">
+              <div class="text-sm font-semibold text-gray-900 mb-1">Seguridad</div>
+              <p class="text-xs text-gray-500">JWT + mTLS + RBAC + AES-256 encryption</p>
+            </div>
+            <div class="bg-white rounded-lg p-4 border border-gray-100">
+              <div class="text-sm font-semibold text-gray-900 mb-1">QR Format</div>
+              <p class="text-xs text-gray-500">EMVCo TLV conforme normativa BCRA</p>
+            </div>
+            <div class="bg-white rounded-lg p-4 border border-gray-100">
+              <div class="text-sm font-semibold text-gray-900 mb-1">Integración</div>
+              <p class="text-xs text-gray-500">Coelsa (DEBIN + CVU) con sandbox para testing</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Platform screenshots -->
+  <section id="plataforma" class="py-20 px-6 bg-gray-50">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Plataforma de Gestión</h2>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">Panel de administración completo para operar el negocio de pagos QR. Monitoreo en tiempo real, gestión de comercios y liquidaciones.</p>
+      </div>
+
+      <!-- Screenshot 1: Dashboard -->
+      <div class="mb-16">
+        <div class="flex flex-col md:flex-row items-center gap-10">
+          <div class="md:w-1/3">
+            <div class="text-xs font-bold text-primary-600 uppercase tracking-wide mb-2">Dashboard</div>
+            <h3 class="text-2xl font-bold mb-3">Visión General del Negocio</h3>
+            <p class="text-gray-600">Métricas en tiempo real: volumen de transacciones, montos procesados, tasa de éxito, ticket promedio. Gráficos de tendencia y distribución por estado.</p>
+          </div>
+          <div class="md:w-2/3">
+            <img src="/landing/screenshots/dashboard.png" alt="Dashboard QRi" class="rounded-xl screenshot-shadow border border-gray-200 w-full" loading="lazy" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Screenshot 2: Transactions -->
+      <div class="mb-16">
+        <div class="flex flex-col md:flex-row-reverse items-center gap-10">
+          <div class="md:w-1/3">
+            <div class="text-xs font-bold text-primary-600 uppercase tracking-wide mb-2">Transacciones</div>
+            <h3 class="text-2xl font-bold mb-3">Seguimiento en Tiempo Real</h3>
+            <p class="text-gray-600">Listado completo de transacciones con filtros por estado, comercio, fecha y monto. Detalle de cada operación con la traza completa del flujo Coelsa.</p>
+          </div>
+          <div class="md:w-2/3">
+            <img src="/landing/screenshots/transacciones-listado.png" alt="Transacciones QRi" class="rounded-xl screenshot-shadow border border-gray-200 w-full" loading="lazy" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Screenshot 3: QR Generation -->
+      <div class="mb-16">
+        <div class="flex flex-col md:flex-row items-center gap-10">
+          <div class="md:w-1/3">
+            <div class="text-xs font-bold text-primary-600 uppercase tracking-wide mb-2">Códigos QR</div>
+            <h3 class="text-2xl font-bold mb-3">Generación QR EMVCo</h3>
+            <p class="text-gray-600">Generación de códigos QR interoperables en formato EMVCo TLV. QR estáticos y dinámicos, asociados a cada punto de venta del comercio.</p>
+          </div>
+          <div class="md:w-2/3">
+            <img src="/landing/screenshots/qr-generacion.png" alt="Generación QR" class="rounded-xl screenshot-shadow border border-gray-200 w-full" loading="lazy" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Screenshot 4: Merchant Detail -->
+      <div>
+        <div class="flex flex-col md:flex-row-reverse items-center gap-10">
+          <div class="md:w-1/3">
+            <div class="text-xs font-bold text-primary-600 uppercase tracking-wide mb-2">Comercios</div>
+            <h3 class="text-2xl font-bold mb-3">Gestión de Comercios</h3>
+            <p class="text-gray-600">Alta, configuración y monitoreo de comercios. Registro automático en Coelsa, asignación de CVU, configuración de comisiones y estado de actividad.</p>
+          </div>
+          <div class="md:w-2/3">
+            <img src="/landing/screenshots/comercio-detalle.png" alt="Detalle Comercio" class="rounded-xl screenshot-shadow border border-gray-200 w-full" loading="lazy" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-20 px-6">
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Explorá la plataforma en vivo</h2>
+      <p class="text-lg text-gray-600 mb-10 max-w-2xl mx-auto">Accedé a la demo con datos de prueba. Dashboard completo, transacciones simuladas, gestión de comercios y generación de códigos QR.</p>
+      <a href="/app/" class="inline-flex items-center justify-center bg-primary-600 text-white font-semibold px-10 py-4 rounded-lg hover:bg-primary-700 transition-colors text-lg">
+        Acceder a la Demo
+        <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+      </a>
+      <p class="mt-4 text-sm text-gray-400">admin@qri.app &middot; Admin2026$</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-100 py-10 px-6">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <div class="w-6 h-6 bg-primary-600 rounded flex items-center justify-center">
+          <span class="text-white font-bold text-xs">QR</span>
+        </div>
+        <span class="text-sm font-semibold text-gray-900">QRi</span>
+        <span class="text-sm text-gray-400 ml-2">Plataforma de Pagos QR Interoperable</span>
+      </div>
+      <div class="text-sm text-gray-400">
+        Palta &middot; PSP Transferencias 3.0 &middot; Red Coelsa
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

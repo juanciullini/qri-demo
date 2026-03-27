@@ -70,7 +70,7 @@ api.interceptors.response.use(
       isRefreshing = false;
       localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
-      window.location.href = '/login';
+      window.location.href = '/app/login';
       return Promise.reject(error);
     }
 
@@ -95,7 +95,7 @@ api.interceptors.response.use(
 
       localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
-      window.location.href = '/login';
+      window.location.href = '/app/login';
 
       return Promise.reject(refreshError);
     } finally {

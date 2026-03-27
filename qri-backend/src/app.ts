@@ -60,20 +60,38 @@ async function bootstrap(): Promise<void> {
   // COELSA webhooks (mTLS, no JWT)
   await app.register(coelsaRoutes, { prefix: '/coelsa' });
 
-  // Serve frontend static files in production
+  // Serve static files in production (landing + SPA)
   if (env.NODE_ENV === 'production') {
     const publicDir = path.join(__dirname, '..', 'public');
 
+    // Serve /app/* from public/app/
     await app.register(fastifyStatic, {
-      root: publicDir,
-      prefix: '/',
+      root: path.join(publicDir, 'app'),
+      prefix: '/app/',
+      decorateReply: false,
       wildcard: false,
     });
 
-    // SPA fallback: non-API routes serve index.html
+    // Serve /landing/* from public/landing/ (screenshots, etc.)
+    await app.register(fastifyStatic, {
+      root: path.join(publicDir, 'landing'),
+      prefix: '/landing/',
+      decorateReply: false,
+      wildcard: false,
+    });
+
+    // Landing page at root
+    app.get('/', (_request, reply) => {
+      return reply.sendFile('index.html', path.join(publicDir, 'landing'));
+    });
+
+    // SPA fallback: /app/* routes serve app/index.html
     app.setNotFoundHandler((request, reply) => {
+      if (request.url.startsWith('/app')) {
+        return reply.sendFile('index.html', path.join(publicDir, 'app'));
+      }
       if (!request.url.startsWith('/api') && !request.url.startsWith('/coelsa') && !request.url.startsWith('/ws')) {
-        return reply.sendFile('index.html');
+        return reply.sendFile('index.html', path.join(publicDir, 'landing'));
       }
       reply.status(404).send({ error: 'Not found' });
     });
