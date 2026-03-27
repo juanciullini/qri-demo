@@ -37,6 +37,7 @@
         <a href="#como-funciona" class="text-sm text-gray-600 hover:text-primary-600 transition-colors">Producto</a>
         <a href="#mercado" class="text-sm text-gray-600 hover:text-primary-600 transition-colors">Oportunidad</a>
         <a href="#plataforma" class="text-sm text-gray-600 hover:text-primary-600 transition-colors">Plataforma</a>
+        <a href="#api" class="text-sm text-gray-600 hover:text-primary-600 transition-colors">API</a>
         <a href="/app/" class="bg-primary-600 text-white text-sm font-medium px-5 py-2 rounded-lg hover:bg-primary-700 transition-colors">Acceder a la Demo</a>
       </div>
       <a href="/app/" class="md:hidden bg-primary-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors">Demo</a>
@@ -275,8 +276,252 @@
     </div>
   </section>
 
+  <!-- API Integration -->
+  <section id="api" class="py-20 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Integración vía API REST</h2>
+        <p class="text-lg text-gray-600 max-w-3xl mx-auto">QRi se integra al sistema existente de Palta a través de una API REST completa. Tu plataforma opera los pagos QR programáticamente — el dashboard refleja la actividad en tiempo real.</p>
+      </div>
+
+      <!-- Architecture diagram -->
+      <div class="bg-gray-50 rounded-2xl p-8 md:p-12 mb-16">
+        <h3 class="text-xl font-bold text-center mb-10">Arquitectura de Integración</h3>
+        <div class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6">
+          <div class="bg-white rounded-xl p-6 border border-gray-200 text-center min-w-[180px]">
+            <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+              <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            </div>
+            <div class="font-semibold text-sm">Tu Sistema</div>
+            <div class="text-xs text-gray-500 mt-1">App / Backend / ERP</div>
+          </div>
+          <div class="flex flex-col items-center">
+            <svg class="w-8 h-8 text-primary-400 rotate-90 md:rotate-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+            <span class="text-xs text-gray-400 font-mono">REST API</span>
+          </div>
+          <div class="bg-primary-600 rounded-xl p-6 text-center min-w-[180px]">
+            <div class="w-10 h-10 bg-primary-500 rounded-lg flex items-center justify-center mx-auto mb-3">
+              <span class="text-white font-bold text-xs">QR</span>
+            </div>
+            <div class="font-semibold text-sm text-white">QRi API</div>
+            <div class="text-xs text-primary-200 mt-1">Procesamiento + Dashboard</div>
+          </div>
+          <div class="flex flex-col items-center">
+            <svg class="w-8 h-8 text-primary-400 rotate-90 md:rotate-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+            <span class="text-xs text-gray-400 font-mono">mTLS</span>
+          </div>
+          <div class="bg-white rounded-xl p-6 border border-gray-200 text-center min-w-[180px]">
+            <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+              <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/></svg>
+            </div>
+            <div class="font-semibold text-sm">Coelsa</div>
+            <div class="text-xs text-gray-500 mt-1">Red Interbancaria</div>
+          </div>
+        </div>
+        <p class="text-center text-sm text-gray-500 mt-8 max-w-2xl mx-auto">Tu sistema consume la API de QRi para operar comercios, generar QRs y procesar pagos. Coelsa envía los webhooks de confirmación. El dashboard muestra todo en tiempo real.</p>
+      </div>
+
+      <!-- API modules grid -->
+      <div class="grid md:grid-cols-3 gap-6 mb-16">
+        <div class="border border-gray-100 rounded-xl p-6">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-9 h-9 bg-primary-100 text-primary-600 rounded-lg flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+            </div>
+            <h4 class="font-semibold">Autenticación</h4>
+          </div>
+          <p class="text-sm text-gray-600 mb-3">JWT con access + refresh tokens. Login, refresh automático y logout con revocación en Redis.</p>
+          <div class="space-y-1">
+            <code class="block text-xs text-gray-500 font-mono">POST /api/auth/login</code>
+            <code class="block text-xs text-gray-500 font-mono">POST /api/auth/refresh</code>
+          </div>
+        </div>
+        <div class="border border-gray-100 rounded-xl p-6">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-9 h-9 bg-primary-100 text-primary-600 rounded-lg flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+            </div>
+            <h4 class="font-semibold">Comercios</h4>
+          </div>
+          <p class="text-sm text-gray-600 mb-3">CRUD completo, registro en Coelsa, activación/suspensión, estadísticas por comercio y configuración de comisiones.</p>
+          <div class="space-y-1">
+            <code class="block text-xs text-gray-500 font-mono">POST /api/merchants</code>
+            <code class="block text-xs text-gray-500 font-mono">POST /api/merchants/:id/activate</code>
+            <code class="block text-xs text-gray-500 font-mono">GET &nbsp;/api/merchants/:id/stats</code>
+          </div>
+        </div>
+        <div class="border border-gray-100 rounded-xl p-6">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-9 h-9 bg-primary-100 text-primary-600 rounded-lg flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
+            </div>
+            <h4 class="font-semibold">Códigos QR</h4>
+          </div>
+          <p class="text-sm text-gray-600 mb-3">Generación de QR estáticos y dinámicos en formato EMVCo TLV. Descarga como imagen PNG/SVG o PDF imprimible.</p>
+          <div class="space-y-1">
+            <code class="block text-xs text-gray-500 font-mono">POST /api/qr/static</code>
+            <code class="block text-xs text-gray-500 font-mono">POST /api/qr/dynamic</code>
+            <code class="block text-xs text-gray-500 font-mono">GET &nbsp;/api/qr/:id/image</code>
+          </div>
+        </div>
+        <div class="border border-gray-100 rounded-xl p-6">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-9 h-9 bg-primary-100 text-primary-600 rounded-lg flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+            </div>
+            <h4 class="font-semibold">Billetera (Pagos Salientes)</h4>
+          </div>
+          <p class="text-sm text-gray-600 mb-3">Escaneo y validación de QR externos, inicio de pago saliente vía DEBIN. La billetera de Palta paga a comercios de otras redes.</p>
+          <div class="space-y-1">
+            <code class="block text-xs text-gray-500 font-mono">POST /api/wallet/scan</code>
+            <code class="block text-xs text-gray-500 font-mono">POST /api/wallet/pay</code>
+            <code class="block text-xs text-gray-500 font-mono">GET &nbsp;/api/wallet/transactions</code>
+          </div>
+        </div>
+        <div class="border border-gray-100 rounded-xl p-6">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-9 h-9 bg-primary-100 text-primary-600 rounded-lg flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+            </div>
+            <h4 class="font-semibold">Transacciones</h4>
+          </div>
+          <p class="text-sm text-gray-600 mb-3">Listado con filtros, estadísticas agregadas, detalle con traza Coelsa, devoluciones y export CSV/Excel.</p>
+          <div class="space-y-1">
+            <code class="block text-xs text-gray-500 font-mono">GET &nbsp;/api/transactions</code>
+            <code class="block text-xs text-gray-500 font-mono">GET &nbsp;/api/transactions/stats</code>
+            <code class="block text-xs text-gray-500 font-mono">POST /api/transactions/:id/refund</code>
+          </div>
+        </div>
+        <div class="border border-gray-100 rounded-xl p-6">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-9 h-9 bg-primary-100 text-primary-600 rounded-lg flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <h4 class="font-semibold">Liquidaciones</h4>
+          </div>
+          <p class="text-sm text-gray-600 mb-3">Generación de liquidaciones por período, detalle de transacciones incluidas, export para conciliación contable.</p>
+          <div class="space-y-1">
+            <code class="block text-xs text-gray-500 font-mono">POST /api/settlements</code>
+            <code class="block text-xs text-gray-500 font-mono">GET &nbsp;/api/settlements/:id</code>
+            <code class="block text-xs text-gray-500 font-mono">GET &nbsp;/api/settlements/:id/export</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- Code examples -->
+      <div class="grid md:grid-cols-2 gap-8 mb-16">
+        <div>
+          <h3 class="text-xl font-bold mb-6">Ejemplo: Flujo de integración completo</h3>
+          <div class="space-y-4 text-sm text-gray-600">
+            <div class="flex gap-3">
+              <div class="w-7 h-7 bg-primary-600 text-white rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">1</div>
+              <div>
+                <span class="font-semibold text-gray-900">Autenticarse</span> — Tu backend obtiene un JWT llamando a <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded font-mono">POST /api/auth/login</code>
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <div class="w-7 h-7 bg-primary-600 text-white rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">2</div>
+              <div>
+                <span class="font-semibold text-gray-900">Dar de alta un comercio</span> — Enviás CUIT, CBU, MCC y datos del comercio. QRi lo registra en Coelsa.
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <div class="w-7 h-7 bg-primary-600 text-white rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">3</div>
+              <div>
+                <span class="font-semibold text-gray-900">Generar QR</span> — Pedís un QR estático (monto libre) o dinámico (monto fijo, con vencimiento). Recibís el string EMVCo TLV listo para mostrar.
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <div class="w-7 h-7 bg-primary-600 text-white rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">4</div>
+              <div>
+                <span class="font-semibold text-gray-900">Procesar pagos</span> — Cuando un usuario escanea el QR, Coelsa notifica a QRi vía webhooks (intención, débito, acreditación). La transacción avanza automáticamente.
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <div class="w-7 h-7 bg-primary-600 text-white rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">5</div>
+              <div>
+                <span class="font-semibold text-gray-900">Consultar estado</span> — Polleas <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded font-mono">GET /api/transactions</code> o usás WebSocket para actualizaciones en tiempo real.
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <div class="w-7 h-7 bg-primary-600 text-white rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">6</div>
+              <div>
+                <span class="font-semibold text-gray-900">Liquidar</span> — Generás liquidaciones por período. El sistema calcula comisiones, neto a pagar y exporta para conciliación.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold mb-6">Ejemplo de código</h3>
+          <div class="bg-gray-900 rounded-xl overflow-hidden">
+            <div class="flex items-center gap-2 px-4 py-3 bg-gray-800">
+              <div class="w-3 h-3 rounded-full bg-red-500"></div>
+              <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+              <div class="w-3 h-3 rounded-full bg-green-500"></div>
+              <span class="text-xs text-gray-400 ml-2 font-mono">integration.ts</span>
+            </div>
+            <pre class="p-5 text-sm leading-relaxed overflow-x-auto"><code class="text-gray-300"><span class="text-gray-500">// 1. Autenticación</span>
+<span class="text-purple-400">const</span> { access_token } = <span class="text-purple-400">await</span> fetch(<span class="text-green-400">'/api/auth/login'</span>, {
+  method: <span class="text-green-400">'POST'</span>,
+  body: JSON.stringify({
+    email: <span class="text-green-400">'admin@qri.app'</span>,
+    password: <span class="text-green-400">'Admin2026$'</span>
+  })
+}).then(<span class="text-yellow-300">r</span> <span class="text-purple-400">=></span> r.json())
+
+<span class="text-gray-500">// 2. Crear comercio</span>
+<span class="text-purple-400">const</span> merchant = <span class="text-purple-400">await</span> fetch(<span class="text-green-400">'/api/merchants'</span>, {
+  method: <span class="text-green-400">'POST'</span>,
+  headers: {
+    Authorization: <span class="text-green-400">`Bearer <span class="text-yellow-300">${access_token}</span>`</span>
+  },
+  body: JSON.stringify({
+    business_name: <span class="text-green-400">'Cafetería Test'</span>,
+    cuit: <span class="text-green-400">'30712345671'</span>,
+    cbu:  <span class="text-green-400">'0070000000000000000010'</span>,
+    mcc_codes: [{
+      mcc: <span class="text-green-400">'5812'</span>,
+      desc: <span class="text-green-400">'Restaurantes'</span>,
+      commission: <span class="text-yellow-300">2.5</span>
+    }]
+  })
+}).then(<span class="text-yellow-300">r</span> <span class="text-purple-400">=></span> r.json())
+
+<span class="text-gray-500">// 3. Generar QR dinámico</span>
+<span class="text-purple-400">const</span> qr = <span class="text-purple-400">await</span> fetch(<span class="text-green-400">'/api/qr/dynamic'</span>, {
+  method: <span class="text-green-400">'POST'</span>,
+  headers: {
+    Authorization: <span class="text-green-400">`Bearer <span class="text-yellow-300">${access_token}</span>`</span>
+  },
+  body: JSON.stringify({
+    merchant_id: merchant.id,
+    amount: <span class="text-yellow-300">1500.50</span>,
+    expiration: <span class="text-yellow-300">30</span>
+  })
+}).then(<span class="text-yellow-300">r</span> <span class="text-purple-400">=></span> r.json())
+
+<span class="text-gray-500">// qr.qr_data → string EMVCo TLV listo</span>
+<span class="text-gray-500">// qr.qr_id_trx → ID para tracking</span></code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sandbox callout -->
+      <div class="bg-primary-50 border border-primary-100 rounded-xl p-8 flex flex-col md:flex-row items-center gap-6">
+        <div class="w-14 h-14 bg-primary-100 text-primary-600 rounded-xl flex items-center justify-center flex-shrink-0">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+        </div>
+        <div>
+          <h4 class="font-semibold text-lg mb-1">Modo Sandbox incluido</h4>
+          <p class="text-gray-600 text-sm">QRi incluye un sandbox completo que simula todas las respuestas de Coelsa. Probá flujos exitosos, timeouts, reversiones y devoluciones sin conectar a la red real. 11 escenarios de test configurables vía API.</p>
+        </div>
+        <a href="/app/" class="flex-shrink-0 bg-primary-600 text-white text-sm font-medium px-6 py-2.5 rounded-lg hover:bg-primary-700 transition-colors">Probar la API</a>
+      </div>
+    </div>
+  </section>
+
   <!-- CTA -->
-  <section class="py-20 px-6">
+  <section class="py-20 px-6 bg-gray-50">
     <div class="max-w-4xl mx-auto text-center">
       <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Explorá la plataforma en vivo</h2>
       <p class="text-lg text-gray-600 mb-10 max-w-2xl mx-auto">Accedé a la demo con datos de prueba. Dashboard completo, transacciones simuladas, gestión de comercios y generación de códigos QR.</p>
