@@ -31,14 +31,8 @@ COPY qri-backend/prisma ./prisma
 # Frontend SPA → public/app/
 COPY --from=frontend-builder /app/frontend/dist ./public/app
 
-# Landing page → public/landing/
+# Landing page + screenshots → public/landing/
 COPY landing/ ./public/landing/
-
-# Screenshots for landing page
-COPY presentacion/screenshots/dashboard.png ./public/landing/screenshots/
-COPY presentacion/screenshots/transacciones-listado.png ./public/landing/screenshots/
-COPY presentacion/screenshots/qr-generacion.png ./public/landing/screenshots/
-COPY presentacion/screenshots/comercio-detalle.png ./public/landing/screenshots/
 
 EXPOSE 3000
 CMD ["sh", "-c", "npx prisma migrate deploy && npx tsx prisma/seed.ts && node dist/app.js"]
