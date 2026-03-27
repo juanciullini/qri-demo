@@ -31,7 +31,20 @@ const app = Fastify({
 async function bootstrap(): Promise<void> {
   // Plugins
   await app.register(cors, { origin: env.FRONTEND_URL, credentials: true });
-  await app.register(helmet);
+  await app.register(helmet, {
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.tailwindcss.com"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", "data:", "blob:"],
+        connectSrc: ["'self'", "wss:", "ws:"],
+        fontSrc: ["'self'"],
+        objectSrc: ["'none'"],
+        upgradeInsecureRequests: [],
+      },
+    },
+  });
   await app.register(rateLimit, {
     max: 100,
     timeWindow: '1 minute',
