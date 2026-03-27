@@ -64,11 +64,10 @@ async function bootstrap(): Promise<void> {
   if (env.NODE_ENV === 'production') {
     const publicDir = path.join(__dirname, '..', 'public');
 
-    // Serve /app/* from public/app/
+    // Serve /app/* from public/app/ (first registration decorates reply with sendFile)
     await app.register(fastifyStatic, {
       root: path.join(publicDir, 'app'),
       prefix: '/app/',
-      decorateReply: false,
       wildcard: false,
     });
 
