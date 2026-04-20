@@ -1,9 +1,15 @@
 import { useState, useEffect } from 'react'
 import type { FormEvent } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Save, Loader2 } from 'lucide-react'
+import { ArrowLeft, Plus, Save, Trash2, Loader2 } from 'lucide-react'
 import { useMerchant, useCreateMerchant, useUpdateMerchant } from '@/hooks/useMerchants'
 import LoadingSpinner from '@/components/ui/LoadingSpinner'
+
+interface MccRow {
+  mcc: string
+  desc: string
+  commission: string
+}
 
 interface FormData {
   name: string
@@ -15,10 +21,12 @@ interface FormData {
   address: string
   city: string
   postalCode: string
-  mcc: string
+  mccCodes: MccRow[]
   splitPercentage: string
   status: string
 }
+
+const emptyMccRow: MccRow = { mcc: '', desc: '', commission: '' }
 
 const initialFormData: FormData = {
   name: '',
@@ -30,9 +38,15 @@ const initialFormData: FormData = {
   address: '',
   city: '',
   postalCode: '',
-  mcc: '',
+  mccCodes: [{ ...emptyMccRow }],
   splitPercentage: '100',
   status: 'PENDING',
+}
+
+type SimpleField = Exclude<keyof FormData, 'mccCodes'>
+type FieldErrors = Partial<Record<SimpleField, string>> & {
+  mccCodes?: Array<Partial<Record<keyof MccRow, string>>>
+  mccCodesGeneral?: string
 }
 
 export default function MerchantFormPage() {
@@ -47,13 +61,25 @@ export default function MerchantFormPage() {
   const updateMutation = useUpdateMerchant()
 
   const [formData, setFormData] = useState<FormData>(initialFormData)
-  const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>(
-    {},
-  )
+  const [errors, setErrors] = useState<FieldErrors>({})
   const [initialized, setInitialized] = useState(!isEditing)
 
   useEffect(() => {
     if (isEditing && merchant && !initialized) {
+      const existingRows: MccRow[] =
+        merchant.mccCodes && merchant.mccCodes.length > 0
+          ? merchant.mccCodes.map((c) => ({
+              mcc: c.mcc ?? '',
+              desc: c.desc ?? '',
+              commission:
+                c.commission !== undefined && c.commission !== null
+                  ? String(c.commission)
+                  : '',
+            }))
+          : merchant.mcc
+            ? [{ mcc: merchant.mcc, desc: '', commission: '' }]
+            : [{ ...emptyMccRow }]
+
       setFormData({
         name: merchant.name ?? '',
         cuit: merchant.cuit ?? '',
@@ -64,7 +90,7 @@ export default function MerchantFormPage() {
         address: merchant.address ?? '',
         city: '',
         postalCode: '',
-        mcc: merchant.mcc ?? '',
+        mccCodes: existingRows,
         splitPercentage: '100',
         status: merchant.status ?? 'PENDING',
       })
@@ -74,7 +100,7 @@ export default function MerchantFormPage() {
 
   const loading = createMutation.isPending || updateMutation.isPending
 
-  function updateField(key: keyof FormData, value: string) {
+  function updateField(key: SimpleField, value: string) {
     setFormData((prev) => ({ ...prev, [key]: value }))
     if (errors[key]) {
       setErrors((prev) => {
@@ -85,8 +111,49 @@ export default function MerchantFormPage() {
     }
   }
 
+  function updateMccRow(index: number, field: keyof MccRow, value: string) {
+    setFormData((prev) => {
+      const nextRows = prev.mccCodes.map((row, i) =>
+        i === index ? { ...row, [field]: value } : row,
+      )
+      return { ...prev, mccCodes: nextRows }
+    })
+    setErrors((prev) => {
+      if (!prev.mccCodes && !prev.mccCodesGeneral) return prev
+      const next = { ...prev }
+      if (next.mccCodes) {
+        const rowErrors = next.mccCodes.slice()
+        if (rowErrors[index]) {
+          const rowCopy = { ...rowErrors[index] }
+          delete rowCopy[field]
+          rowErrors[index] = rowCopy
+          next.mccCodes = rowErrors
+        }
+      }
+      delete next.mccCodesGeneral
+      return next
+    })
+  }
+
+  function addMccRow() {
+    setFormData((prev) => ({
+      ...prev,
+      mccCodes: [...prev.mccCodes, { ...emptyMccRow }],
+    }))
+  }
+
+  function removeMccRow(index: number) {
+    setFormData((prev) => ({
+      ...prev,
+      mccCodes:
+        prev.mccCodes.length <= 1
+          ? prev.mccCodes
+          : prev.mccCodes.filter((_, i) => i !== index),
+    }))
+  }
+
   function validate(): boolean {
-    const newErrors: Partial<Record<keyof FormData, string>> = {}
+    const newErrors: FieldErrors = {}
 
     if (!formData.name.trim()) newErrors.name = 'Nombre es requerido'
     if (!formData.cuit.trim()) {
@@ -104,15 +171,49 @@ export default function MerchantFormPage() {
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Email no valido'
     }
-    if (!formData.mcc.trim()) newErrors.mcc = 'MCC es requerido'
+
+    if (formData.mccCodes.length === 0) {
+      newErrors.mccCodesGeneral = 'Agrega al menos un MCC'
+    } else {
+      const rowErrors = formData.mccCodes.map((row) => {
+        const rowErr: Partial<Record<keyof MccRow, string>> = {}
+        if (!row.mcc.trim()) {
+          rowErr.mcc = 'MCC es requerido'
+        } else if (!/^\d{4}$/.test(row.mcc)) {
+          rowErr.mcc = 'MCC debe tener 4 digitos'
+        }
+        if (!row.desc.trim()) rowErr.desc = 'Descripcion es requerida'
+        if (!row.commission.trim()) {
+          rowErr.commission = 'Comision es requerida'
+        } else {
+          const num = Number(row.commission)
+          if (Number.isNaN(num) || num < 0 || num > 100) {
+            rowErr.commission = 'Comision entre 0 y 100'
+          }
+        }
+        return rowErr
+      })
+      if (rowErrors.some((r) => Object.keys(r).length > 0)) {
+        newErrors.mccCodes = rowErrors
+      }
+    }
 
     setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
+    return (
+      Object.keys(newErrors).filter((k) => k !== 'mccCodes').length === 0 &&
+      !newErrors.mccCodes
+    )
   }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
     if (!validate()) return
+
+    const mccCodesPayload = formData.mccCodes.map((row) => ({
+      mcc: row.mcc.trim(),
+      desc: row.desc.trim(),
+      commission: Number(row.commission),
+    }))
 
     if (isEditing && id) {
       updateMutation.mutate(
@@ -121,7 +222,7 @@ export default function MerchantFormPage() {
           data: {
             name: formData.name,
             cbu: formData.cbu,
-            mcc: formData.mcc,
+            mccCodes: mccCodesPayload,
             email: formData.email,
             phone: formData.phone || undefined,
             address: formData.address || undefined,
@@ -135,7 +236,7 @@ export default function MerchantFormPage() {
           name: formData.name,
           cuit: formData.cuit,
           cbu: formData.cbu,
-          mcc: formData.mcc,
+          mccCodes: mccCodesPayload,
           email: formData.email,
           phone: formData.phone || undefined,
           address: formData.address || undefined,
@@ -241,18 +342,83 @@ export default function MerchantFormPage() {
         </div>
 
         <div className="rounded-lg border border-border bg-card p-6 shadow-sm">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-card-foreground">
+              MCC (Merchant Category Codes)
+            </h2>
+            <button
+              type="button"
+              onClick={addMccRow}
+              className="inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-xs font-medium text-card-foreground transition-colors hover:bg-muted"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              Agregar MCC
+            </button>
+          </div>
+          {errors.mccCodesGeneral && (
+            <p className="mb-2 text-xs text-destructive">
+              {errors.mccCodesGeneral}
+            </p>
+          )}
+          <div className="space-y-3">
+            {formData.mccCodes.map((row, index) => {
+              const rowErrors = errors.mccCodes?.[index]
+              return (
+                <div
+                  key={index}
+                  className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_2fr_1fr_auto] sm:items-start"
+                >
+                  <FormField
+                    label={index === 0 ? 'MCC' : ''}
+                    value={row.mcc}
+                    onChange={(v) =>
+                      updateMccRow(index, 'mcc', v.replace(/\D/g, '').slice(0, 4))
+                    }
+                    error={rowErrors?.mcc}
+                    required={index === 0}
+                    placeholder="5812"
+                    inputMode="numeric"
+                  />
+                  <FormField
+                    label={index === 0 ? 'Descripcion' : ''}
+                    value={row.desc}
+                    onChange={(v) => updateMccRow(index, 'desc', v)}
+                    error={rowErrors?.desc}
+                    required={index === 0}
+                    placeholder="Restaurantes"
+                  />
+                  <FormField
+                    label={index === 0 ? 'Comision (%)' : ''}
+                    value={row.commission}
+                    onChange={(v) => updateMccRow(index, 'commission', v)}
+                    error={rowErrors?.commission}
+                    required={index === 0}
+                    placeholder="1.5"
+                    type="number"
+                    inputMode="decimal"
+                  />
+                  <div className={index === 0 ? 'sm:pt-7' : ''}>
+                    <button
+                      type="button"
+                      onClick={() => removeMccRow(index)}
+                      disabled={formData.mccCodes.length <= 1}
+                      className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border text-muted-foreground transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
+                      aria-label="Eliminar MCC"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+
+        <div className="rounded-lg border border-border bg-card p-6 shadow-sm">
           <h2 className="mb-4 text-lg font-semibold text-card-foreground">
             Configuracion
           </h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <FormField
-              label="MCC (Merchant Category Code)"
-              value={formData.mcc}
-              onChange={(v) => updateField('mcc', v)}
-              error={errors.mcc}
-              required
-              placeholder="5812"
-            />
             <FormField
               label="Porcentaje Split (%)"
               value={formData.splitPercentage}
@@ -328,10 +494,12 @@ function FormField({
 }) {
   return (
     <div>
-      <label className="mb-1.5 block text-sm font-medium text-card-foreground">
-        {label}
-        {required && <span className="text-destructive"> *</span>}
-      </label>
+      {label && (
+        <label className="mb-1.5 block text-sm font-medium text-card-foreground">
+          {label}
+          {required && <span className="text-destructive"> *</span>}
+        </label>
+      )}
       <input
         type={type}
         value={value}

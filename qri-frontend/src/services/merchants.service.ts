@@ -1,6 +1,7 @@
 import api from '@/services/api';
 import type {
   CreateMerchantData,
+  MccCode,
   Merchant,
   MerchantFilters,
   MerchantStats,
@@ -11,13 +12,26 @@ import type {
 // ── Mappers ──
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+function mapMccCodes(raw: any): MccCode[] {
+  if (!Array.isArray(raw)) return [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return raw.map((item: any) => ({
+    mcc: String(item?.mcc ?? ''),
+    desc: String(item?.desc ?? ''),
+    commission: Number(item?.commission ?? 0),
+  }));
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function mapMerchant(raw: any): Merchant {
+  const mccCodes = mapMccCodes(raw.mcc_codes ?? raw.mccCodes);
   return {
     id: raw._id ?? raw.id,
     name: raw.business_name ?? raw.name,
     cuit: raw.cuit ?? '',
     cbu: raw.cbu ?? '',
-    mcc: raw.mcc_codes?.[0]?.mcc ?? raw.mcc ?? '',
+    mcc: mccCodes[0]?.mcc ?? raw.mcc ?? '',
+    mccCodes,
     status: raw.status ?? 'PENDING',
     email: raw.contact_email ?? raw.email ?? '',
     phone: raw.phone,
@@ -47,7 +61,13 @@ function mapMerchantRequest(
   if ('name' in payload && payload.name !== undefined) body.business_name = payload.name;
   if ('cuit' in payload && payload.cuit !== undefined) body.cuit = payload.cuit;
   if ('cbu' in payload && payload.cbu !== undefined) body.cbu = payload.cbu;
-  if ('mcc' in payload && payload.mcc !== undefined) body.mcc_codes = [{ mcc: payload.mcc }];
+  if ('mccCodes' in payload && payload.mccCodes !== undefined) {
+    body.mcc_codes = payload.mccCodes.map((c) => ({
+      mcc: c.mcc,
+      desc: c.desc,
+      commission: c.commission,
+    }));
+  }
   if ('email' in payload && payload.email !== undefined) body.contact_email = payload.email;
   if ('phone' in payload && payload.phone !== undefined) body.phone = payload.phone;
   if ('address' in payload && payload.address !== undefined) body.address = payload.address;

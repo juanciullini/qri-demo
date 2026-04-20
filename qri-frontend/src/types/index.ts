@@ -43,12 +43,19 @@ export interface PaginationParams {
 
 // ── Merchants ──
 
+export interface MccCode {
+  mcc: string;
+  desc: string;
+  commission: number;
+}
+
 export interface Merchant {
   id: string;
   name: string;
   cuit: string;
   cbu: string;
   mcc: string;
+  mccCodes: MccCode[];
   status: 'ACTIVE' | 'SUSPENDED' | 'PENDING' | 'DEACTIVATED';
   email: string;
   phone?: string;
@@ -66,7 +73,7 @@ export interface CreateMerchantData {
   name: string;
   cuit: string;
   cbu: string;
-  mcc: string;
+  mccCodes: MccCode[];
   email: string;
   phone?: string;
   address?: string;
@@ -75,7 +82,7 @@ export interface CreateMerchantData {
 export interface UpdateMerchantData {
   name?: string;
   cbu?: string;
-  mcc?: string;
+  mccCodes?: MccCode[];
   email?: string;
   phone?: string;
   address?: string;

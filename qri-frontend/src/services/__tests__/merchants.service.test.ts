@@ -64,6 +64,7 @@ describe('getMerchants', () => {
       cuit: '20345678901',
       cbu: '1234567890123456789012',
       mcc: '5411',
+      mccCodes: [{ mcc: '5411', desc: '', commission: 0 }],
       status: 'ACTIVE',
       email: 'test@test.com',
       phone: '1155554444',
@@ -197,7 +198,7 @@ describe('createMerchant', () => {
       name: 'Nuevo',
       cuit: '20345678901',
       cbu: '123',
-      mcc: '5411',
+      mccCodes: [{ mcc: '5411', desc: 'Restaurantes', commission: 1.5 }],
       email: 'nuevo@test.com',
     })
 
@@ -205,7 +206,7 @@ describe('createMerchant', () => {
       business_name: 'Nuevo',
       cuit: '20345678901',
       cbu: '123',
-      mcc_codes: [{ mcc: '5411' }],
+      mcc_codes: [{ mcc: '5411', desc: 'Restaurantes', commission: 1.5 }],
       contact_email: 'nuevo@test.com',
     })
     expect(result.id).toBe('m-new')
